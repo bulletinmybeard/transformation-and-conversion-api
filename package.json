@@ -14,7 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/bulletinmybeard/image-transformation-api.git"
   },
-  "keywords": ["node", "javascript", "express", "sharp", "api"],
+  "keywords": [
+    "node",
+    "javascript",
+    "express",
+    "sharp",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -41,7 +47,6 @@
     "@types/sharp": "^0.26.1",
     "eslint": "^7.15.0",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-docker": "^0.1.0",
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
@@ -53,6 +58,10 @@
     "express": "^4.17.1",
     "ioredis": "^4.19.4",
     "lodash": "^4.17.20",
+    "redis-commander": "^0.7.0",
     "sharp": "^0.26.3"
+  },
+  "engines": {
+    "node": "14.15.1"
   }
 }
