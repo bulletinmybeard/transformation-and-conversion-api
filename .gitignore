@@ -9,5 +9,3 @@ npm-debug.log
 .idea
 .node_history
 .env
-.env.dev
-.env.prod
