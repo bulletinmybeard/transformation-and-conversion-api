@@ -1,5 +1,5 @@
-# image-transformation-api
-Image transformation API
+# transformation-and-conversion-api
+Image transformation and video conversion API
 
 # Sample images and sources
 All image samples were taken from https://unsplash.com/ (https://unsplash.com/license).
