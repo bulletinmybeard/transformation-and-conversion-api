@@ -35,7 +35,7 @@ try {
     redisClient = new Redis(redisConfig);
 
     redisClient.on('connect', () => {
-        console.log('connext to redis host');
+        console.log('connect to redis host');
     });
 
     redisClient.on('end', () => {

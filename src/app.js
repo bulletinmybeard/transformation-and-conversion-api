@@ -4,8 +4,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
-app.use(require('compression'));
-
 app.disable('x-powered-by');
 app.set('trust proxy', true);
 
