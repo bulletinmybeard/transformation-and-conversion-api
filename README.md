@@ -36,6 +36,7 @@ URLs consist of the `project`, `format` (e.g. image or video), `transformation` 
 | `<file_extension>` | image (png, jpe, jpg, jpeg, gif, webp) and video (mov, avi, mpeg, mp4 - WIP!) |
 
 # TODO
+- Implement feature to purge a single-file or the entire cache.
 - Add more NGINX reverse proxy examples to use the subordinate domain namespace for the project (e.g. `https://<project>.rschu.dev/<preset>/<file_name>.<file_extension>`).
 - Finish the presets to use short URLs like `/test/image/fs/pr_featured/sample-5.jpg` or `/test/pr_featured/sample-5.jpg` instead of `/test/image/fs/h_1000,w_1000,r_cover,crop,ch_520,cw_520,oleft_0,otop_0,median/sample-5.jpg`.
 - Make Redis optional and check the environment variables of its existence.
