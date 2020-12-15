@@ -9,3 +9,5 @@ npm-debug.log
 .idea
 .node_history
 .env
+files/output/images/*
+files/output/video/*

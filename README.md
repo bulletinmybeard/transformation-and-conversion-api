@@ -1,5 +1,5 @@
 # transformation-and-conversion-api
-Image transformation and video conversion API
+Image transformation and video conversion API ... (WIP)
 
 # Sample images and sources
 All image samples were taken from https://unsplash.com/ (https://unsplash.com/license).
@@ -20,6 +20,13 @@ All image samples were taken from https://unsplash.com/ (https://unsplash.com/li
     * https://unsplash.com/@joshmillerdp
     * https://unsplash.com/photos/CpZzU7w4Cz4
 
-
-
+# TODO
+- Make Redis optional and check the environment variables of its existence
+- Finish up video conversion feature
+- Rewrite regex with number ranges and better grouping
+- ~~Rewrite URL path regex to select the source of the image or video:~~ `/<project_name>/<target>/<source>/<actions>/sample-5.jpg`
+    - ~~redis (redis cache)~~
+    - ~~fs (file system)~~
+    - ~~raw (original source without transformations)~~
+    - ~~preview (original source with transformations)~~
 
