@@ -21,6 +21,7 @@ All image samples were taken from https://unsplash.com/ (https://unsplash.com/li
     * https://unsplash.com/photos/CpZzU7w4Cz4
 
 # TODO
+- Finish the presets to use short URLs like `/test/image/fs/pr_featured/sample-5.jpg` or `/test/pr_featured/sample-5.jpg` instead of `/test/image/fs/h_1000,w_1000,r_cover,crop,ch_520,cw_520,oleft_0,otop_0,median/sample-5.jpg`
 - Make Redis optional and check the environment variables of its existence
 - Finish up video conversion feature
 - Rewrite regex with number ranges and better grouping
