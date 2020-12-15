@@ -58,7 +58,6 @@ app.get('*', async (req, res, next) => {
     }
 
     const {
-        project,
         type,
         source,
         actions,
@@ -66,14 +65,14 @@ app.get('*', async (req, res, next) => {
     } = parserInfo;
 
     try {
+        const keyName = normalizeString(file.name + '_' +  actions.string);
+        const localFilePath = join(localPaths.images.output, file.full);
+        const localKeyFilePath = join(localPaths.images.output, keyName + '.' + file.extension);
+
         if (type === 'image') {
 
             let applyActions = false;
             let content = null;
-
-            const keyName = normalizeString(file.name + '_' +  actions.string);
-            const localFilePath = join(localPaths.images.output, file.full);
-            const localKeyFilePath = join(localPaths.images.output, keyName + '.' + file.extension);
 
             if (source === 'redis') {
                 if (redisClient === null) {
