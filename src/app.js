@@ -7,7 +7,7 @@ const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', true);
 
-const { existsSync } = require('fs');
+const { existsSync, writeFileSync } = require('fs');
 const { join } = require('path');
 const { server } = require('./modules/config');
 
