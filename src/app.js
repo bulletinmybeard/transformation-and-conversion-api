@@ -113,7 +113,7 @@ app.get('*', async (req, res, next) => {
             return serveBufferImage(res, content, file.extension);
 
         } else if (parserInfo.type === 'video') {
-            // ...
+            return res.send('videos are not supported yet');
         }
     } catch (err) {
         return next(err);
