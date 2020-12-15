@@ -66,7 +66,7 @@ app.get('*', async (req, res, next) => {
 
     try {
         const keyName = normalizeString(file.name + '_' +  actions.string);
-        const localFilePath = join(localPaths.images.output, file.full);
+        const localFilePath = join(localPaths.images.input, file.full);
         const localKeyFilePath = join(localPaths.images.output, keyName + '.' + file.extension);
 
         if (type === 'image') {
