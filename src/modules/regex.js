@@ -32,6 +32,7 @@ module.exports = {
     cheight: '^ch_([\\.\\d]+)$',
     cwidth: '^cw_([\\.\\d]+)$',
     oleft: '^oleft_([\\.\\d]+)$',
+    convertFrom: `^convert_from:([${supportedFormats}]+)$`,
     otop: '^otop_([\\.\\d]+)$',
     cbottom: '^cbottom_([\\.\\d]+)$',
     position: `^p_([\\.\\d]+)_([\\.\\d]+)_([\\.\\d]+)_([\\.\\d]+)$`,

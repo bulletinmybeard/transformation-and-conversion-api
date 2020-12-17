@@ -15,6 +15,31 @@ module.exports = {
         'raw',
         'preview',
     ],
+    conversion: {
+        image: {
+            webp: {
+                quality: 80,
+                alphaQuality: 100,
+                lossless: false,
+                nearLossless: false,
+                smartSubsample: false,
+                reductionEffort: 4,
+                force: true,
+            },
+            jpeg: {
+                progressive: false,
+                chromaSubsampling: '4:2:0',
+                optimizeCoding: true,
+                trellisQuantisation: false,
+                overshootDeringing: false,
+                optimiseScans: false,
+                optimizeScans: false,
+                quantizationTable: 0,
+                force: true,
+            },
+        },
+        video: {},
+    },
     /**
      * Presets can be used to define complex transformations per project and to keep URLs short.
      *

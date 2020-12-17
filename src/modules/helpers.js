@@ -2,7 +2,7 @@ const hasProperty = require('lodash/has');
 const { join } = require('path');
 const sharp = require('sharp');
 
-const { projects } = require('./config');
+const { projects, conversion } = require('./config');
 const regexRules = require('./regex');
 const redisClient = require('./redis');
 
@@ -63,8 +63,10 @@ const helpers = {
             returnFullMatch,
         });
     },
-    normalizeString: (value) => {
-        return value.replace(new RegExp('[^a-zA-Z0-9]+', 'g'), '_');
+    normalizeString: (fileName, actionsString) => {
+        fileName = fileName.replace(new RegExp('[^a-zA-Z0-9]+', 'g'), '_');
+        actionsString = actionsString.replace(new RegExp('[^a-zA-Z0-9]+', 'g'), '_');
+        return fileName + '_' + actionsString;
     },
     actionParser: (urlPath) => {
 
@@ -149,6 +151,11 @@ const helpers = {
                 const rotate = helpers.regExpMatch(action, regexRules.rotate);
                 if (typeof rotate !== 'undefined') {
                     actionObject.rotate = parseFloat(rotate);
+                }
+
+                const convertFrom = helpers.regExpMatch(action, regexRules.convertFrom);
+                if (typeof convertFrom !== 'undefined') {
+                    actionObject.convertFrom = convertFrom;
                 }
 
                 const gamma = helpers.regExpMatch(action, regexRules.gamma);
@@ -309,13 +316,25 @@ const helpers = {
         res.set('Access-Control-Allow-Origin', '*');
         res.setHeader('Content-Type','image/' + extension);
         res.write(content, 'binary');
-        return res.end(null, 'binary');
+        res.end(null, 'binary');
     },
+    serveImage: (res, content, extension) => {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.setHeader('Content-Type','image/' + extension);
+        res.send(content);
+    },
+    buildSharpObject: ({
+        actions,
+        file,
+        localPaths,
+        sourceFileFormat,
+    }) => {
 
-    buildSharpObject: async ({ actions, file, localPaths }) => {
+        const localFilePath = (sourceFileFormat !== null)
+            ? join(localPaths.images.input, file.name + '.' + sourceFileFormat)
+            : join(localPaths.images.input, file.full);
 
-        const localFilePath = join(localPaths.images.input, file.full);
-        const pImage = await sharp(localFilePath);
+        const pImage = sharp(localFilePath);
 
         if (hasProperty(actions, 'object.resize')) {
             let resizeObject = {};
@@ -360,6 +379,7 @@ const helpers = {
             pImage.extend(extendObject);
         }
 
+        // TODO: Add more settings here when converting to a another image format.
         let toFormatObject = {
             quality: hasProperty(actions, 'object.quality')
                 ? parseInt(actions.object.quality)
@@ -404,14 +424,40 @@ const helpers = {
                 );
         }
 
-        pImage
-            .normalise(hasProperty(actions, 'object.normalise'))
-            .negate(hasProperty(actions, 'object.negate'))
-            .flip(hasProperty(actions, 'object.flip'))
-            .flop(hasProperty(actions, 'object.flop'))
-            .toFormat(file.extension, toFormatObject);
+        if (hasProperty(actions, 'object.normalise')) {
+            pImage
+                .normalise(true);
+        }
 
-        return pImage.toBuffer();
+        if (hasProperty(actions, 'object.negate')) {
+            pImage
+                .negate(true);
+        }
+
+        if (hasProperty(actions, 'object.flip')) {
+            pImage
+                .flip(true);
+        }
+
+        if (hasProperty(actions, 'object.flop')) {
+            pImage
+                .flop(true);
+        }
+
+        if (sourceFileFormat !== null) {
+            const to = file.extension;
+
+            if (!hasProperty(conversion, `image.${to}`)) {
+                throw Error(`Conversion config not found for format '${to}'`);
+            }
+
+            return pImage[to](conversion.image[to]);
+        }
+
+        return pImage
+            .toFormat(
+                file.extension,
+                toFormatObject);
     },
 };
 
