@@ -45,6 +45,7 @@
     "@types/ioredis": "^4.17.8",
     "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.13",
+    "@types/rimraf": "^3.0.0",
     "@types/sharp": "^0.26.1",
     "eslint": "^7.15.0",
     "eslint-config-standard": "^16.0.2",
@@ -54,10 +55,12 @@
     "nodemon": "^2.0.6"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "ioredis": "^4.19.4",
     "lodash": "^4.17.20",
+    "rimraf": "^3.0.2",
     "sharp": "^0.26.3"
   },
   "engines": {

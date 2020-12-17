@@ -1,17 +1,21 @@
 // Load local `.env` file.
 require('dotenv').config();
 
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 
 app.disable('x-powered-by');
 app.set('trust proxy', true);
+app.use(bodyParser
+    .urlencoded({ extended: true }));
 
 const hasProperty = require('lodash/has');
 const { existsSync } = require('fs');
 const { join } = require('path');
+const { promisify } = require('util');
 
-const { server } = require('./modules/config');
+const { server, formats } = require('./modules/config');
 
 const {
     actionParser,
@@ -21,8 +25,6 @@ const {
     buildSharpObject,
     redisClient,
 } = require('./modules/helpers');
-
-const regex = require('./modules/regex');
 
 // Path helper object.
 const localRootPath = join(__dirname, '..');
@@ -38,6 +40,59 @@ const localPaths = {
         output: join(localRootPath, 'files', 'output', 'videos'),
     },
 };
+
+app.post('/purge', async (req, res, next) => {
+
+    if (!hasProperty(req, 'headers.x-purge-secret')) {
+        return next(`'x-purge-secret' header is missing`);
+    } else {
+        if (req.headers['x-purge-secret'] !== process.env.PURGE_SECRET) {
+            return next(`'x-purge-secret' not valid`);
+        }
+    }
+
+    if (!hasProperty(req, 'body.action')) {
+        return next(`'action' body parameter missing but required`);
+    } else {
+        if (![
+            'all',
+            'all-images',
+            'all-videos',
+        ].includes(req.body.action)) {
+            return next(`action '${req.body.action}' not supported`);
+        }
+    }
+
+    const rimraf = await promisify(require('rimraf'));
+
+    let supportedFormats = [...(formats.video || []), ...(formats.image || [])];
+    if (req.body.action !== 'all'
+        && hasProperty(req, 'body.formats')) {
+        if (Object.prototype.toString.call(req.body.formats) !== '[object Array]') {
+            return next(`formats is not an array`);
+        }
+        supportedFormats = (req.body.formats)
+            .filter(format => supportedFormats.includes(format));
+    }
+
+    if (!supportedFormats.length) {
+        return next(`no supported formats found`);
+    }
+
+    try {
+        if (req.body.action === 'all') {
+            await rimraf(join(localPaths.files.output, `**/*.{${supportedFormats}`));
+        } else if (req.body.action === 'all-images') {
+            await rimraf(join(localPaths.images.output, `*.{${supportedFormats}`));
+        } else if (req.body.action === 'all-videos') {
+            await rimraf(join(localPaths.videos.output, `*.{${videoFormats}`));
+        }
+    } catch (err) {
+        return next(err);
+    }
+
+    res.send('purge done');
+});
 
 app.get('*', async (req, res, next) => {
 
