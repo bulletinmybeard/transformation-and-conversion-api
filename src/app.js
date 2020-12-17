@@ -79,14 +79,16 @@ app.post('/purge', async (req, res, next) => {
         return next(`no supported formats found`);
     }
 
+    let globPath;
     try {
         if (req.body.action === 'all') {
-            await rimraf(join(localPaths.files.output, `**/*.{${supportedFormats}`));
+            globPath = join(localPaths.files, 'output', `**/*.{${supportedFormats}}`);
         } else if (req.body.action === 'all-images') {
-            await rimraf(join(localPaths.images.output, `*.{${supportedFormats}`));
+            globPath = join(localPaths.images.output, `*.{${supportedFormats}}`);
         } else if (req.body.action === 'all-videos') {
-            await rimraf(join(localPaths.videos.output, `*.{${videoFormats}`));
+            globPath = join(localPaths.videos.output, `*.{${supportedFormats}}`);
         }
+        await rimraf(globPath);
     } catch (err) {
         return next(err);
     }
